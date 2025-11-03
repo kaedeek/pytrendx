@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="pytrendx",
-    version="1.0.3",
+    version="1.0.6",
     description="Fetch and visualize PyPI package download trends directly from the terminal.",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -22,7 +22,7 @@ setup(
     python_requires=">=3.8",
     entry_points={
         "console_scripts": [
-            "ptx = main:PstatsGet"
+            "ptx = pytrendx.main:PstatsGet"
         ]
     },
     classifiers=[
