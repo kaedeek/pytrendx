@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="pytrendx",
-    version="1.0.6",
+    version="1.2.1",
     description="Fetch and visualize PyPI package download trends directly from the terminal.",
     long_description=long_description,
     long_description_content_type="text/markdown",
