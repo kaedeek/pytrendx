@@ -4,7 +4,7 @@
 [![Downloads](https://pepy.tech/badge/pytrendx)](https://pepy.tech/project/pytrendx)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Discord](https://img.shields.io/badge/Discord-Support%20Server-7289DA?style=flat&logo=discord)](https://discord.gg/MaWeRFxa)
+[![Discord](https://img.shields.io/badge/Discord-Support%20Server-7289DA?style=flat&logo=discord)](https://discord.gg/cY8QxHN5)
 
 `PyTrendx` is a **modern CLI tool** that allows you to easily fetch, visualize, analyze, and predict **PyPI package download statistics** directly from your terminal.
 
