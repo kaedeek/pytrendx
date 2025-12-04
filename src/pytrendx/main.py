@@ -2,6 +2,7 @@ from VersaLog import *
 from pprint import pprint
 from datetime import datetime
 from sklearn.linear_model import LinearRegression
+from functools import lru_cache
 
 import requests
 import json
@@ -12,10 +13,28 @@ import matplotlib.pyplot as plt
 
 logger = VersaLog(enum="simple2", tag="PSTATS", show_tag=True)
 
+@lru_cache(maxsize=64)
+def fetch_overall_cached(pkg):
+    return fetch_overall(pkg)
+
+
 def fetch_overall(pkg: str):
     url = f"https://pypistats.org/api/packages/{pkg}/overall"
     req = requests.get(url)
-    data = req.json()
+
+    try:
+        data = req.json()
+    except Exception:
+        logger.error("Failed to parse JSON from API response.")
+        return []
+
+    if not isinstance(data, dict):
+        logger.error(f"Unexpected API response for '{pkg}': {data}")
+        return []
+
+    if "data" not in data:
+        logger.error(f"No 'data' field in API response for '{pkg}'. Raw response: {data}")
+        return []
 
     dataset = data.get("data", [])
 
@@ -38,7 +57,6 @@ def fetch_overall(pkg: str):
         logger.info(f"{len(records)} records fetched successfully.\n")
 
     return records
-
 
 def show_graph(pkg: str, records):
     dates, downloads = zip(*records)
