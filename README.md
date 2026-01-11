@@ -18,6 +18,8 @@ It combines **pypistats**, **matplotlib**, **NumPy**, and **scikit-learn** to ma
 - Graph visualization of download trends (`--graph`)
 - Statistical analysis using NumPy (`--analyze`)
 - Predict future download trends with machine learning (`--predict`)
+- **Compare multiple packages on the same graph (`--compare`)**
+- **Detect abnormal spikes or drops in downloads (`--anomaly`)**
 
 ---
 
@@ -93,3 +95,25 @@ Day +14: 6,962,138 downloads
 ```
 
 ![predict](/image/res/predict.png)
+
+### Compare multiple packages
+```bash
+ptx --compare numpy pandas requests
+```
+
+- Visualize multiple packages on a single graph
+- Automatically aligns data to the common time range
+- Useful for popularity and growth comparison
+
+### Detect download anomalies
+```bash
+ptx --anomaly requests
+```
+
+```bash
+🚨 Anomaly Detection for 'requests'
+==================================================
+2024-09-15 | ⬆️ SPIKE | 12,430,221 | z=3.41
+2024-10-02 | ⬇️ DROP  | 2,104,553  | z=-3.12
+==================================================
+```

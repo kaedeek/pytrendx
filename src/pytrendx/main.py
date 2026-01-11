@@ -86,6 +86,57 @@ def analyze_stats(pkg: str, records):
     print("=" * 45)
 
 
+def compare_packages(pkgs: list):
+    all_records = {}
+
+    for pkg in pkgs:
+        records = fetch_overall(pkg)
+        if records:
+            all_records[pkg] = records
+
+    if len(all_records) < 2:
+        logger.error("At least two valid packages are required for comparison.")
+        return
+
+    min_len = min(len(r) for r in all_records.values())
+
+    plt.figure(figsize=(10, 5))
+    for pkg, records in all_records.items():
+        records = records[-min_len:]
+        dates, downloads = zip(*records)
+        plt.plot(dates, downloads, label=pkg)
+
+    plt.title("📦 PyPI Download Comparison")
+    plt.xlabel("Date")
+    plt.ylabel("Downloads")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+def detect_anomalies(pkg: str, records, threshold=3.0):
+    downloads = np.array([d[1] for d in records])
+    mean = np.mean(downloads)
+    std = np.std(downloads)
+
+    print(f"\n🚨 Anomaly Detection for '{pkg}'")
+    print("=" * 50)
+
+    found = False
+    for date, dl in records:
+        z = (dl - mean) / std if std > 0 else 0
+        if abs(z) >= threshold:
+            found = True
+            direction = "⬆️ SPIKE" if z > 0 else "⬇️ DROP"
+            print(f"{date.strftime('%Y-%m-%d')} | {direction} | {dl:,} | z={z:.2f}")
+
+    if not found:
+        logger.error("No anomalies detected.")
+
+    print("=" * 50)
+
+
+
 def predict_trend(pkg: str, records, days_ahead: int = 14):
     dates = np.arange(len(records)).reshape(-1, 1)
     downloads = np.array([d[1] for d in records])
@@ -124,6 +175,9 @@ def PstatsGet():
     parser.add_argument("--graph", metavar="PKG", help="Graph visualization of download trends")
     parser.add_argument("--analyze", metavar="PKG", help="Statistical analysis of downloads using NumPy")
     parser.add_argument("--predict", metavar="PKG", help="Predict future trends for a package")
+    parser.add_argument("--compare", nargs="+", metavar="PKG", help="Compare multiple PyPI packages")
+    parser.add_argument("--anomaly", metavar="PKG", help="Detect download anomalies")
+
 
     args = parser.parse_args()
 
@@ -158,6 +212,13 @@ def PstatsGet():
         pkg = args.predict
         records = fetch_overall(pkg)
         predict_trend(pkg, records)
+
+    elif args.compare:
+        compare_packages(args.compare)
+
+    elif args.anomaly:
+        records = fetch_overall(args.anomaly)
+        detect_anomalies(args.anomaly, records)
 
     else:
         parser.print_help()
