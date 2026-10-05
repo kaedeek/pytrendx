@@ -33,7 +33,7 @@ pip install pytrendx
 
 ### Fetch current download stats
 ```bash
-ptx --get pillow
+ptx get pillow
 ```
 
 ```bash
@@ -49,14 +49,14 @@ Last month: N/A
 
 ### Graph download trends
 ```bash
-ptx --graph pillow
+ptx graph pillow
 ```
 
 ![graph](/image/res/graph.png)
 
 ### Analyze download statistics
 ```bash
-ptx --analyze pillow
+ptx analyze pillow
 ```
 
 ```bash
@@ -71,7 +71,7 @@ Std Deviation:   1,608,374.11
 
 ### Predict future trends
 ```bash
-ptx --predict pillow
+ptx predict pillow
 ```
 
 ```bash
@@ -98,7 +98,7 @@ Day +14: 6,962,138 downloads
 
 ### Compare multiple packages
 ```bash
-ptx --compare numpy pandas requests
+ptx compare numpy pandas requests
 ```
 
 - Visualize multiple packages on a single graph
@@ -107,7 +107,7 @@ ptx --compare numpy pandas requests
 
 ### Detect download anomalies
 ```bash
-ptx --anomaly requests
+ptx anomaly requests
 ```
 
 ```bash

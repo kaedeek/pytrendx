@@ -171,17 +171,70 @@ def PstatsGet():
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
 
-    parser.add_argument("--get", metavar="PKG", help="Get PyPI stats for a package")
-    parser.add_argument("--graph", metavar="PKG", help="Graph visualization of download trends")
-    parser.add_argument("--analyze", metavar="PKG", help="Statistical analysis of downloads using NumPy")
-    parser.add_argument("--predict", metavar="PKG", help="Predict future trends for a package")
-    parser.add_argument("--compare", nargs="+", metavar="PKG", help="Compare multiple PyPI packages")
-    parser.add_argument("--anomaly", metavar="PKG", help="Detect download anomalies")
+    subparsers = parser.add_subparsers(
+        dest="command",
+        metavar="COMMAND"
+    )
+
+    get_parser = subparsers.add_parser(
+        "get",
+        help="Get PyPI stats for a package"
+    )
+    get_parser.add_argument(
+        "package",
+        metavar="PKG"
+    )
+
+    graph_parser = subparsers.add_parser(
+        "graph",
+        help="Graph visualization of download trends"
+    )
+    graph_parser.add_argument(
+        "package",
+        metavar="PKG"
+    )
+
+    analyze_parser = subparsers.add_parser(
+        "analyze",
+        help="Statistical analysis of downloads using NumPy"
+    )
+    analyze_parser.add_argument(
+        "package",
+        metavar="PKG"
+    )
+
+    predict_parser = subparsers.add_parser(
+        "predict",
+        help="Predict future trends for a package"
+    )
+    predict_parser.add_argument(
+        "package",
+        metavar="PKG"
+    )
+
+    compare_parser = subparsers.add_parser(
+        "compare",
+        help="Compare multiple PyPI packages"
+    )
+    compare_parser.add_argument(
+        "packages",
+        nargs="+",
+        metavar="PKG"
+    )
+
+    anomaly_parser = subparsers.add_parser(
+        "anomaly",
+        help="Detect download anomalies"
+    )
+    anomaly_parser.add_argument(
+        "package",
+        metavar="PKG"
+    )
 
 
     args = parser.parse_args()
 
-    if args.get:
+    if args.command == "get":
         try:
             pkg = args.get
             print(f"\n📦 Fetching PyPI stats for '{pkg}'...\n")
@@ -198,25 +251,25 @@ def PstatsGet():
         except Exception as e:
             logger.error(e)
 
-    elif args.graph:
+    elif args.command == "graph":
         pkg = args.graph
         records = fetch_overall(pkg)
         show_graph(pkg, records)
 
-    elif args.analyze:
+    elif args.command == "analyze":
         pkg = args.analyze
         records = fetch_overall(pkg)
         analyze_stats(pkg, records)
 
-    elif args.predict:
+    elif args.command == "predict":
         pkg = args.predict
         records = fetch_overall(pkg)
         predict_trend(pkg, records)
 
-    elif args.compare:
+    elif args.command == "compare":
         compare_packages(args.compare)
 
-    elif args.anomaly:
+    elif args.command == "anomaly":
         records = fetch_overall(args.anomaly)
         detect_anomalies(args.anomaly, records)
 
